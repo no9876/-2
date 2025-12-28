@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>明日方舟 - 雪山降临1101活动数据集</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎮 明日方舟 - 雪山降临1101活动数据集</h1>
+            <p class="subtitle">玩家数据分析与管理平台</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="overview">概览</button>
+            <button class="tab-btn" data-tab="player">玩家表</button>
+            <button class="tab-btn" data-tab="operator">干员表</button>
+            <button class="tab-btn" data-tab="activity">活动表</button>
+            <button class="tab-btn" data-tab="activity-level">活动关卡</button>
+            <button class="tab-btn" data-tab="checkin">签到活动</button>
+            <button class="tab-btn" data-tab="promotion">精英化记录</button>
+            <button class="tab-btn" data-tab="skill">技能表</button>
+            <button class="tab-btn" data-tab="battle">战斗记录</button>
+            <button class="tab-btn" data-tab="relation">关联表</button>
+        </nav>
+
+        <!-- 概览面板 -->
+        <div class="tab-content active" id="overview">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>总玩家数</h3>
+                    <p class="stat-number" id="total-players">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>总干员数</h3>
+                    <p class="stat-number" id="total-operators">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>活动关卡数</h3>
+                    <p class="stat-number" id="total-levels">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>战斗记录数</h3>
+                    <p class="stat-number" id="total-battles">0</p>
+                </div>
+            </div>
+            <div class="chart-container">
+                <h2>数据统计图表</h2>
+                <canvas id="statsChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 玩家表 -->
+        <div class="tab-content" id="player">
+            <div class="table-controls">
+                <input type="text" id="player-search" placeholder="搜索玩家昵称或ID..." class="search-input">
+                <select id="player-level-filter" class="filter-select">
+                    <option value="">所有等级</option>
+                    <option value="1-20">1-20级</option>
+                    <option value="21-40">21-40级</option>
+                    <option value="41-60">41-60级</option>
+                    <option value="61-80">61-80级</option>
+                    <option value="81-100">81-100级</option>
+                </select>
+                <button class="btn-primary" onclick="exportData('player')">导出数据</button>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>玩家ID</th>
+                            <th>活动关卡ID</th>
+                            <th>昵称</th>
+                            <th>等级</th>
+                            <th>注册时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="player-table-body">
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="player-pagination"></div>
+        </div>
+
+        <!-- 干员表 -->
+        <div class="tab-content" id="operator">
+            <div class="table-controls">
+                <input type="text" id="operator-search" placeholder="搜索干员名称..." class="search-input">
+                <select id="operator-rarity-filter" class="filter-select">
+                    <option value="">所有稀有度</option>
+                    <option value="1">1星</option>
+                    <option value="2">2星</option>
+                    <option value="3">3星</option>
+                    <option value="4">4星</option>
+                    <option value="5">5星</option>
+                    <option value="6">6星</option>
+                </select>
+                <select id="operator-activity-filter" class="filter-select">
+                    <option value="">全部</option>
+                    <option value="1">活动干员</option>
+                    <option value="0">非活动干员</option>
+                </select>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>干员ID</th>
+                            <th>玩家ID</th>
+                            <th>干员名称</th>
+                            <th>稀有度</th>
+                            <th>是否活动干员</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="operator-table-body">
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="operator-pagination"></div>
+        </div>
+
+        <!-- 活动表 -->
+        <div class="tab-content" id="activity">
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>活动ID</th>
+                            <th>活动名称</th>
+                            <th>活动类型</th>
+                            <th>活动任务</th>
+                            <th>活动商店</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activity-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 活动关卡表 -->
+        <div class="tab-content" id="activity-level">
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>关卡ID</th>
+                            <th>活动ID</th>
+                            <th>关卡名称</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="activity-level-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 签到活动表 -->
+        <div class="tab-content" id="checkin">
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>签到活动ID</th>
+                            <th>活动ID</th>
+                            <th>签到日期</th>
+                            <th>奖励类型</th>
+                        </tr>
+                    </thead>
+                    <tbody id="checkin-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 干员精英化表 -->
+        <div class="tab-content" id="promotion">
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>精英化ID</th>
+                            <th>干员ID</th>
+                            <th>精英化等级</th>
+                            <th>解锁时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="promotion-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 干员技能表 -->
+        <div class="tab-content" id="skill">
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>技能ID</th>
+                            <th>干员ID</th>
+                            <th>技能名称</th>
+                            <th>技能等级</th>
+                        </tr>
+                    </thead>
+                    <tbody id="skill-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 关卡战斗记录表 -->
+        <div class="tab-content" id="battle">
+            <div class="table-controls">
+                <select id="battle-result-filter" class="filter-select">
+                    <option value="">所有结果</option>
+                    <option value="胜利">胜利</option>
+                    <option value="失败">失败</option>
+                </select>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>战斗记录ID</th>
+                            <th>玩家ID</th>
+                            <th>活动关卡ID</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            <th>战斗结果</th>
+                        </tr>
+                    </thead>
+                    <tbody id="battle-table-body">
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="battle-pagination"></div>
+        </div>
+
+        <!-- 玩家活动关卡关联表 -->
+        <div class="tab-content" id="relation">
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>关联ID</th>
+                            <th>玩家ID</th>
+                            <th>活动关卡ID</th>
+                        </tr>
+                    </thead>
+                    <tbody id="relation-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script src="snow.js"></script>
+</body>
+</html>
+
